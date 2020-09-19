@@ -7,6 +7,7 @@ import {
   Post,
   ValidationPipe,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 
 import { ResponseDTO } from '../dto/response.dto';
@@ -19,7 +20,9 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/helf-check')
-  async helfCheck(): Promise<string> {
+  async helfCheck(@Request() req): Promise<string> {
+    console.log(req.user);
+
     return 'The api is on';
   }
 
