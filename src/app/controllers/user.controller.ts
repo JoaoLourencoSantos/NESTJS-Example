@@ -1,15 +1,7 @@
-import { UserDTO } from '../dto/user.dto';
-import { ResponseDTO } from '../dto/response.dto';
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
-import User from '../models/user';
+import { ResponseDTO } from '../dto/response.dto';
+import { UserDTO } from '../dto/user.dto';
 import RepoService from '../services/user.service';
 
 @Controller('user')
