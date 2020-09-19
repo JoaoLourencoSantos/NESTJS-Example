@@ -6,7 +6,6 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { Field, ObjectType } from '@nestjs/graphql';
 
 @Unique(['email'])
 @Entity()
@@ -14,13 +13,13 @@ export default class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 255 })
   name: string;
 
-  @Column()
+  @Column({ nullable: false, type: 'varchar', length: 255 })
   email: string;
 
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
   @CreateDateColumn({ name: 'date_birth' })

@@ -1,20 +1,21 @@
-import { UserDTO } from './../dto/user.dto';
+import { UserRepository } from './../repositories/user.repository';
 import {
-  Injectable,
   BadRequestException,
-  NotFoundException,
+  ConflictException,
+  Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 import User from '../models/user';
 import { ResponseDTO } from './../dto/response.dto';
+import { UserDTO } from './../dto/user.dto';
 
 @Injectable()
 class UserService {
   public constructor(
-    @InjectRepository(User) public readonly userReporitory: Repository<User>,
+    @InjectRepository(User) public readonly userReporitory: UserRepository,
   ) {}
 
   async findAll(): Promise<ResponseDTO> {
@@ -33,32 +34,39 @@ class UserService {
   }
 
   async find({ id }): Promise<ResponseDTO> {
+    if (!id) {
+      throw new BadRequestException("Parameter 'id' is necessary!");
+    }
+    let result: User = null;
+
     try {
-      if (!id) {
-        throw new BadRequestException("Parameter 'id' is necessary!");
-      }
-
-      const result: User = await this.userReporitory.findOne(id);
-
-      if (!result) {
-        throw new NotFoundException('user not found');
-      }
-
-      return new ResponseDTO('Found users', result, 200, true);
+      result = await this.userReporitory.findOne(id);
     } catch (exception) {
       throw new InternalServerErrorException(
         'Erro in find users: ' + exception.message,
       );
     }
+
+    if (!result) {
+      throw new NotFoundException('user not found');
+    }
+
+    return new ResponseDTO('Found users', result, 200, true);
   }
 
   async create(userDTO: UserDTO): Promise<ResponseDTO> {
-    try {
-      const user: User = await this.userReporitory.save(userDTO);
+    const validEmail: User = await this.userReporitory.findOne({
+      email: userDTO.email,
+    });
 
-      if (!user) {
-        throw new BadRequestException('user not can saved');
-      }
+    if (validEmail) {
+      throw new ConflictException(
+        'Erro in create user: this user already exists',
+      );
+    }
+
+    try {
+      const user: User = await this.userReporitory.createUser(userDTO);
 
       return new ResponseDTO('Created', user, 201, true);
     } catch (exception) {

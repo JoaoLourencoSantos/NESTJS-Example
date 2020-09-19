@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, ValidationPipe } from '@nestjs/common';
 
 import { ResponseDTO } from '../dto/response.dto';
 import { UserDTO } from '../dto/user.dto';
@@ -24,7 +24,7 @@ export class UserController {
   }
 
   @Post()
-  async create(@Body() user: UserDTO): Promise<ResponseDTO> {
+  async create(@Body(ValidationPipe) user: UserDTO): Promise<ResponseDTO> {
     return this.repository.create(user);
   }
 }
