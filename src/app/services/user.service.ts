@@ -12,6 +12,8 @@ import User from '../models/user';
 import { ResponseDTO } from './../dto/response.dto';
 import { UserDTO } from './../dto/user.dto';
 
+import * as bcrypt from 'bcrypt';
+
 @Injectable()
 class UserService {
   public constructor(
@@ -74,6 +76,27 @@ class UserService {
         'Erro in create user: ' + exception.message,
       );
     }
+  }
+
+  async auth(email: string, virtualPass: string): Promise<any> {
+    const user = await this.userReporitory.findOne({ email });
+
+    console.log(user);
+
+    if (user && (await this.comparePassword(user.password, virtualPass))) {
+      const { password, ...result } = user;
+
+      return result;
+    }
+
+    return null;
+  }
+
+  private async comparePassword(
+    password: string,
+    virtualPass: string,
+  ): Promise<boolean> {
+    return await bcrypt.compare(virtualPass, password);
   }
 }
 

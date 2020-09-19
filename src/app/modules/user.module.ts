@@ -1,9 +1,7 @@
-import { UserRepository } from './../repositories/user.repository';
-import { UserController } from './../controllers/user.controller';
+import { UserRepository } from '../repositories/user.repository';
+import { UserController } from '../controllers/user.controller';
 import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
-import User from '../models/user';
 import UserService from '../services/user.service';
 
 @Global()
@@ -13,5 +11,5 @@ import UserService from '../services/user.service';
   controllers: [UserController],
   exports: [UserService],
 })
-class RepoModule {}
-export default RepoModule;
+class UserModule {}
+export default UserModule;

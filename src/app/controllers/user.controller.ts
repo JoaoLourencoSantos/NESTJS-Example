@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, ValidationPipe } from '@nestjs/common';
+import { JwtAuthGuard } from './../../auth/guard/jwt.guard';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  ValidationPipe,
+  UseGuards,
+} from '@nestjs/common';
 
 import { ResponseDTO } from '../dto/response.dto';
 import { UserDTO } from '../dto/user.dto';
@@ -8,6 +17,7 @@ import RepoService from '../services/user.service';
 export class UserController {
   constructor(private readonly repository: RepoService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get('/helf-check')
   async helfCheck(): Promise<string> {
     return 'The api is on';
