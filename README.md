@@ -4,7 +4,7 @@
 
 ## Description
 
-This project is to learn the amazing progressive node framework
+The project aims to learn a little more about the most talked about framework in the node world in 2020, Nest JS, which aims to facilitate and provide scalability and productivity for the construction of Apis. This one that has as one of its users of a famous brand Adidas, tries with its progressivity to make possible a greater standardization in the writing of the code making it closer to syntexes, making use of decorators, and injections and among other resources
 
 ## Installation
 
